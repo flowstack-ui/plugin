@@ -12,6 +12,31 @@ cannot execute the bundled local resolver. It deliberately excludes MCP
 implementation code, paid Blocks source, private Blueprints, and product
 research.
 
+## Install in Codex
+
+Install the immutable public `v0.2.1` marketplace release from GitHub:
+
+```bash
+codex plugin marketplace add flowstack-ui/plugin --ref v0.2.1
+codex plugin add flowstack-ui@flowstack-ui
+```
+
+Refresh Codex and start a new task so the installed skills and MCP connection
+are available to the new session. To update later, refresh the marketplace and
+reinstall the plugin from the `flowstack-ui` source.
+
+## Universal plugin directory
+
+The currently published universal-directory listing is the skills-only
+`0.1.2` release:
+
+https://chatgpt.com/plugins/plugins_6a934339ccc88191b35ff37bcaf23c00
+
+The GitHub marketplace above provides the released `0.2.1` Codex package with
+the hosted FLOWSTACK MCP declaration. The universal-directory listing will be
+updated only after OpenAI approves and the publisher explicitly publishes the
+reviewed MCP-backed release.
+
 ## Install for local development
 
 Add this checkout as a local marketplace once, then install the plugin:
@@ -21,8 +46,8 @@ codex plugin marketplace add /absolute/path/to/plugin
 codex plugin add flowstack-ui@flowstack-ui
 ```
 
-Refresh Codex and start a new task. The plugin contributes four explicit
-skills:
+Refresh Codex and start a new task. The public and local installations
+contribute four explicit skills:
 
 - `$flowstack-ui-builder`
 - `$flowstack-ui-compose`
