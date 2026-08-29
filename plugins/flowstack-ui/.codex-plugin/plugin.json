@@ -1,6 +1,6 @@
 {
   "name": "flowstack-ui",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Exact-version workflows for building, composing, reviewing, and maintaining FLOWSTACK UI.",
   "author": {
     "name": "FLOWSTACK UI",
@@ -24,7 +24,8 @@
     "developerName": "Swifty LLC",
     "category": "Developer Tools",
     "capabilities": [
-      "Skills"
+      "Skills",
+      "MCP"
     ],
     "websiteURL": "https://agents.brick-ui.com",
     "defaultPrompt": [
@@ -37,5 +38,6 @@
     "termsOfServiceURL": "https://github.com/flowstack-ui/plugin/blob/main/TERMS.md",
     "composerIcon": "./assets/composer-icon.png",
     "logo": "./assets/logo.png"
-  }
+  },
+  "mcpServers": "./.mcp.json"
 }

@@ -13,6 +13,9 @@ const pluginRoot = join(root, "plugins", config.pluginName);
 const manifestPath = join(pluginRoot, ".codex-plugin", "plugin.json");
 const manifestBytes = await readFile(manifestPath);
 const manifest = JSON.parse(manifestBytes.toString("utf8"));
+const mcpConfigPath = join(pluginRoot, config.mcp.path);
+const mcpConfigBytes = await readFile(mcpConfigPath);
+const mcpConfig = JSON.parse(mcpConfigBytes.toString("utf8"));
 const source = await readJson(join(root, "sources", "agent-tools.json"));
 
 assert.equal(config.schema, "flowstack.plugin-config.v1");
@@ -42,17 +45,26 @@ assert.equal(manifest.interface.privacyPolicyURL, config.privacyPolicyURL);
 assert.equal(manifest.interface.termsOfServiceURL, config.termsOfServiceURL);
 assert.equal(manifest.interface.composerIcon, `./${config.interfaceAssets.composerIcon}`);
 assert.equal(manifest.interface.logo, `./${config.interfaceAssets.logo}`);
-assert.deepEqual(manifest.interface.capabilities, ["Skills"]);
-assert.equal("mcpServers" in manifest, false);
+assert.deepEqual(manifest.interface.capabilities, ["Skills", "MCP"]);
+assert.equal(manifest.mcpServers, `./${config.mcp.path}`);
+assert.deepEqual(mcpConfig, {
+  mcpServers: {
+    [config.mcp.serverName]: {
+      type: "http",
+      url: "https://agents.brick-ui.com/mcp",
+    },
+  },
+});
 assert.equal("apps" in manifest, false);
 assert.equal("hooks" in manifest, false);
 
-assert.equal(source.schema, "flowstack.plugin-source-lock.v2");
+assert.equal(source.schema, "flowstack.plugin-source-lock.v3");
 assert.equal(source.package, "@flowstack-ui/agent-tools");
-for (const field of ["sourcePluginManifestSha256", "pluginManifestSha256", "skillsSha256", "assetsSha256"]) {
+for (const field of ["sourcePluginManifestSha256", "pluginManifestSha256", "mcpConfigSha256", "skillsSha256", "assetsSha256"]) {
   assert.match(source[field], /^[a-f0-9]{64}$/u);
 }
 assert.equal(sha256(manifestBytes), source.pluginManifestSha256);
+assert.equal(sha256(mcpConfigBytes), source.mcpConfigSha256);
 
 const assetsRoot = join(pluginRoot, "assets");
 const expectedAssets = Object.values(config.interfaceAssets)
@@ -82,11 +94,11 @@ for (const name of skills) {
 }
 assert.equal(await digestTree(skillsRoot), source.skillsSha256);
 
-const allText = `${manifestBytes.toString("utf8")}\n${await Promise.all((await filesBelow(skillsRoot)).map((path) => readFile(path, "utf8"))).then((parts) => parts.join("\n"))}`;
+const allText = `${manifestBytes.toString("utf8")}\n${mcpConfigBytes.toString("utf8")}\n${await Promise.all((await filesBelow(skillsRoot)).map((path) => readFile(path, "utf8"))).then((parts) => parts.join("\n"))}`;
 assert.doesNotMatch(allText, /(?:BEGIN PRIVATE|\/Users\/|\/private\/tmp\/|customer-name-placeholder)/u);
 assert.doesNotMatch(allText, /\[TODO(?::|\])/u);
 
-console.log(`Verified ${manifest.name}@${manifest.version}: ${skills.length} skills, exact ${source.package}@${source.version} lock`);
+console.log(`Verified ${manifest.name}@${manifest.version}: ${skills.length} skills, hosted MCP, exact ${source.package}@${source.version} lock`);
 
 async function assertSquarePng(path) {
   const content = await readFile(path);

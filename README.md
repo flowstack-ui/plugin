@@ -7,8 +7,10 @@ This repository is a distribution adapter. The exact public skills remain
 owned and released by
 [`@flowstack-ui/agent-tools`](https://github.com/flowstack-ui/agent-tools).
 The plugin vendors one reviewed Agent Tools release, records its npm integrity,
-and deliberately excludes MCP configuration, paid Blocks source, private
-Blueprints, and product research.
+and connects the public, locked-only FLOWSTACK MCP endpoint for clients that
+cannot execute the bundled local resolver. It deliberately excludes MCP
+implementation code, paid Blocks source, private Blueprints, and product
+research.
 
 ## Install for local development
 
@@ -27,22 +29,25 @@ skills:
 - `$flowstack-ui-review`
 - `$flowstack-ui-maintainer`
 
-The skills resolve Agent Knowledge from the exact FLOWSTACK packages installed
-in the target project. The standalone LLM and MCP surfaces remain available at
-[`agents.brick-ui.com`](https://agents.brick-ui.com).
+The skills prefer Agent Knowledge from exact FLOWSTACK packages installed in
+the target project. When local script execution is unavailable, they use the
+plugin MCP at `https://agents.brick-ui.com/mcp` and accept only exact versions
+present in its public locked release inventory. Hosted guidance never claims
+to inspect a consumer's installed files.
 
 ## Update the plugin
 
 Sync one exact published Agent Tools version:
 
 ```bash
-npm run sync -- --version 0.1.0
+npm run sync -- --version 0.1.1 --plugin-version 0.2.0
 npm run check
 ```
 
 The sync command downloads the npm archive without running lifecycle scripts,
-validates the package and skills-only plugin boundary, stages the replacement,
-and records npm integrity plus content digests in `sources/agent-tools.json`.
+validates the package and source-skill boundary, stages the skills plus the
+reviewed HTTPS MCP declaration, and records npm integrity plus content digests
+in `sources/agent-tools.json`.
 A changed public skill set fails until `config/plugin.json` is reviewed.
 
 Agent Tools and the distributable plugin are independently versioned. By
@@ -51,7 +56,7 @@ directory-packaging-only release, preserve the exact Agent Tools lock and pass
 an explicit plugin version:
 
 ```bash
-npm run sync -- --version 0.1.0 --plugin-version 0.1.1
+npm run sync -- --version 0.1.1 --plugin-version 0.2.1
 ```
 
 Review the generated skill, manifest, and interface-asset diff, run the

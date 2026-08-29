@@ -6,7 +6,7 @@ Tools skills.
 ```text
 public FLOWSTACK packages
   -> @flowstack-ui/agent-tools exact release
-  -> locked skills-only plugin snapshot
+  -> locked skill snapshot + canonical hosted MCP declaration
   -> local marketplace testing
   -> universal plugin directory release
 ```
@@ -32,10 +32,13 @@ the directory `logo` is the detailed flowing-ribbon FLOWSTACK mark, while
 small composer surfaces. They share the layered-flow concept and palette but
 are intentionally not identical.
 
-The plugin does not bundle MCP. This keeps tool installation explicit and
-allows skills to work across supported ChatGPT and Codex surfaces without
-silently adding a network or local process. The HTTP and stdio MCP transports
-remain independently versioned Agent Tools surfaces.
+The plugin does not bundle or implement MCP. It declares the canonical
+read-only HTTPS endpoint owned by Agent Tools so ChatGPT clients without local
+script execution can resolve the same exact released guidance. Codex and other
+local clients still prefer the bundled resolver for installed-package or
+staged-archive evidence. The plugin verifier pins the endpoint declaration and
+its digest; Agent Tools independently versions, tests, deploys, and monitors
+the HTTP and stdio transports.
 
 Paid Blocks source and authentication are outside this repository. Installed
 Block code may be reviewed through public Brick owners, but the plugin cannot

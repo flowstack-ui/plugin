@@ -1,7 +1,8 @@
 # Terms of Use
 
 The FLOWSTACK UI plugin is provided under the MIT License. It offers workflow
-guidance and does not guarantee that generated interfaces satisfy every legal,
+guidance through packaged skills and a read-only public MCP service. Neither
+surface guarantees that generated interfaces satisfy every legal,
 accessibility, security, or product requirement.
 
 Users remain responsible for reviewing generated code, respecting package and

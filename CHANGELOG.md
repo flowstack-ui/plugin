@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.0 - 2026-08-29
+
+- Sync the four public workflows from `@flowstack-ui/agent-tools@0.1.1`.
+- Add the canonical read-only hosted FLOWSTACK MCP so ChatGPT clients without
+  local script execution can resolve exact locked package guidance.
+- Preserve local installed-package and staged-archive resolution as the
+  stronger evidence path where execution is available.
+
 ## 0.1.0 - 2026-08-29
 
 - Add the FLOWSTACK UI skills-only plugin and repository-local marketplace.
