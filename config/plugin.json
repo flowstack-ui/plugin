@@ -3,8 +3,14 @@
   "pluginName": "flowstack-ui",
   "marketplaceName": "flowstack-ui",
   "repository": "https://github.com/flowstack-ui/plugin",
+  "developerName": "Swifty LLC",
+  "shortDescription": "Build with FLOWSTACK guidance",
   "privacyPolicyURL": "https://github.com/flowstack-ui/plugin/blob/main/PRIVACY.md",
   "termsOfServiceURL": "https://github.com/flowstack-ui/plugin/blob/main/TERMS.md",
+  "interfaceAssets": {
+    "composerIcon": "assets/composer-icon.png",
+    "logo": "assets/logo.png"
+  },
   "allowedSkills": [
     "flowstack-ui-builder",
     "flowstack-ui-compose",
