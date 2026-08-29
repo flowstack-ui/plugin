@@ -1,0 +1,19 @@
+name: Feature request
+description: Propose a plugin distribution or workflow improvement.
+title: "feature: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: job
+    attributes:
+      label: Developer job
+      description: What should a developer be able to accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: boundary
+    attributes:
+      label: Suggested ownership
+      description: Explain whether this belongs in Agent Tools, the plugin, MCP, or a package.
+    validations:
+      required: true

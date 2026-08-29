@@ -1,0 +1,14 @@
+{
+  "schema": "flowstack.plugin-config.v1",
+  "pluginName": "flowstack-ui",
+  "marketplaceName": "flowstack-ui",
+  "repository": "https://github.com/flowstack-ui/plugin",
+  "privacyPolicyURL": "https://github.com/flowstack-ui/plugin/blob/main/PRIVACY.md",
+  "termsOfServiceURL": "https://github.com/flowstack-ui/plugin/blob/main/TERMS.md",
+  "allowedSkills": [
+    "flowstack-ui-builder",
+    "flowstack-ui-compose",
+    "flowstack-ui-maintainer",
+    "flowstack-ui-review"
+  ]
+}

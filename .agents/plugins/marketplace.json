@@ -1,0 +1,20 @@
+{
+  "name": "flowstack-ui",
+  "interface": {
+    "displayName": "FLOWSTACK UI"
+  },
+  "plugins": [
+    {
+      "name": "flowstack-ui",
+      "source": {
+        "source": "local",
+        "path": "./plugins/flowstack-ui"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
