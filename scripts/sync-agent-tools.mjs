@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const config = await readJson(join(repositoryRoot, "config", "plugin.json"));
-const requestedVersion = readVersion(process.argv.slice(2));
+const { sourceVersion, pluginVersion } = readVersions(process.argv.slice(2));
 const temporaryRoot = await mkdtemp(join(tmpdir(), "flowstack-plugin-sync-"));
 
 try {
@@ -25,7 +25,7 @@ try {
     "npm",
     [
       "pack",
-      `@flowstack-ui/agent-tools@${requestedVersion}`,
+      `@flowstack-ui/agent-tools@${sourceVersion}`,
       "--ignore-scripts",
       "--json",
       "--pack-destination",
@@ -34,7 +34,7 @@ try {
     { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] },
   );
   const [packed] = JSON.parse(packOutput);
-  if (!packed || packed.name !== "@flowstack-ui/agent-tools" || packed.version !== requestedVersion) {
+  if (!packed || packed.name !== "@flowstack-ui/agent-tools" || packed.version !== sourceVersion) {
     fail("npm returned an unexpected Agent Tools archive");
   }
 
@@ -50,10 +50,10 @@ try {
   const sourceManifest = JSON.parse(sourceManifestBytes.toString("utf8"));
   const sourceSkills = join(sourceRoot, "skills");
 
-  if (sourcePackage.name !== "@flowstack-ui/agent-tools" || sourcePackage.version !== requestedVersion) {
+  if (sourcePackage.name !== "@flowstack-ui/agent-tools" || sourcePackage.version !== sourceVersion) {
     fail("packed package identity does not match the requested Agent Tools release");
   }
-  if (sourceManifest.name !== config.pluginName || sourceManifest.version !== requestedVersion) {
+  if (sourceManifest.name !== config.pluginName || sourceManifest.version !== sourceVersion) {
     fail("Agent Tools plugin manifest identity does not match the requested release");
   }
   if ("mcpServers" in sourceManifest || "apps" in sourceManifest || "hooks" in sourceManifest) {
@@ -73,29 +73,48 @@ try {
   await mkdir(join(stagedPlugin, ".codex-plugin"), { recursive: true });
   await cp(sourceSkills, join(stagedPlugin, "skills"), { recursive: true });
 
+  for (const assetPath of Object.values(config.interfaceAssets)) {
+    assertAssetPath(assetPath);
+    const sourceAsset = resolve(repositoryRoot, assetPath);
+    const stagedAsset = resolve(stagedPlugin, assetPath);
+    assertContained(repositoryRoot, sourceAsset);
+    assertContained(stagedPlugin, stagedAsset);
+    await assertSquarePng(sourceAsset);
+    await mkdir(dirname(stagedAsset), { recursive: true });
+    await cp(sourceAsset, stagedAsset);
+  }
+
   const pluginManifest = {
     ...sourceManifest,
+    version: pluginVersion,
     repository: config.repository,
     interface: {
       ...sourceManifest.interface,
+      developerName: config.developerName,
+      shortDescription: config.shortDescription,
       privacyPolicyURL: config.privacyPolicyURL,
       termsOfServiceURL: config.termsOfServiceURL,
+      composerIcon: `./${config.interfaceAssets.composerIcon}`,
+      logo: `./${config.interfaceAssets.logo}`,
     },
   };
   const pluginManifestText = `${JSON.stringify(pluginManifest, null, 2)}\n`;
   await writeFile(join(stagedPlugin, ".codex-plugin", "plugin.json"), pluginManifestText);
 
   const skillDigest = await digestTree(join(stagedPlugin, "skills"));
+  const assetDigest = await digestTree(join(stagedPlugin, "assets"));
   const finalManifestDigest = sha256(Buffer.from(pluginManifestText));
   const sourceLock = {
-    schema: "flowstack.plugin-source-lock.v1",
+    schema: "flowstack.plugin-source-lock.v2",
     package: packed.name,
     version: packed.version,
+    pluginVersion,
     integrity: packed.integrity,
     shasum: packed.shasum,
     sourcePluginManifestSha256: sha256(sourceManifestBytes),
     pluginManifestSha256: finalManifestDigest,
     skillsSha256: skillDigest,
+    assetsSha256: assetDigest,
   };
 
   const pluginRoot = resolve(repositoryRoot, "plugins", config.pluginName);
@@ -113,32 +132,60 @@ try {
 
   const packageJsonPath = join(repositoryRoot, "package.json");
   const packageJson = await readJson(packageJsonPath);
-  packageJson.version = requestedVersion;
+  packageJson.version = pluginVersion;
   await writeFile(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`);
   const packageLockPath = join(repositoryRoot, "package-lock.json");
   if (await exists(packageLockPath)) {
     const packageLock = await readJson(packageLockPath);
-    packageLock.version = requestedVersion;
-    if (packageLock.packages?.[""]) packageLock.packages[""].version = requestedVersion;
+    packageLock.version = pluginVersion;
+    if (packageLock.packages?.[""]) packageLock.packages[""].version = pluginVersion;
     await writeFile(packageLockPath, `${JSON.stringify(packageLock, null, 2)}\n`);
   }
   await mkdir(join(repositoryRoot, "sources"), { recursive: true });
   await writeFile(join(repositoryRoot, "sources", "agent-tools.json"), `${JSON.stringify(sourceLock, null, 2)}\n`);
 
-  console.log(`Synced ${packed.name}@${packed.version} into plugins/${config.pluginName}`);
+  console.log(`Synced ${packed.name}@${packed.version} into ${config.pluginName}@${pluginVersion}`);
 } finally {
   await rm(temporaryRoot, { recursive: true, force: true });
 }
 
-function readVersion(arguments_) {
-  if (arguments_.length !== 2 || arguments_[0] !== "--version") {
-    fail("usage: npm run sync -- --version <exact-version>");
+function readVersions(arguments_) {
+  const values = new Map();
+  for (let index = 0; index < arguments_.length; index += 2) {
+    const flag = arguments_[index];
+    const value = arguments_[index + 1];
+    if (!new Set(["--version", "--plugin-version"]).has(flag) || !value || values.has(flag)) {
+      fail("usage: npm run sync -- --version <exact-agent-tools-version> [--plugin-version <exact-plugin-version>]");
+    }
+    values.set(flag, value);
   }
-  const version = arguments_[1];
-  if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(version)) {
-    fail("--version must be one exact semantic version");
+  const sourceVersion = values.get("--version");
+  const pluginVersion = values.get("--plugin-version") ?? sourceVersion;
+  if (!sourceVersion || !isExactVersion(sourceVersion) || !isExactVersion(pluginVersion)) {
+    fail("source and plugin versions must be exact semantic versions");
   }
-  return version;
+  return { sourceVersion, pluginVersion };
+}
+
+function isExactVersion(version) {
+  return /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/u.test(version);
+}
+
+function assertAssetPath(path) {
+  if (typeof path !== "string" || !/^assets\/[0-9A-Za-z._-]+\.png$/u.test(path)) {
+    fail(`interface asset must be a PNG directly under assets/: ${path}`);
+  }
+}
+
+async function assertSquarePng(path) {
+  const content = await readFile(path);
+  const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  if (content.length < 24 || !content.subarray(0, 8).equals(signature)) {
+    fail(`interface asset is not a valid PNG: ${path}`);
+  }
+  const width = content.readUInt32BE(16);
+  const height = content.readUInt32BE(20);
+  if (width === 0 || width !== height) fail(`interface asset must be square: ${path}`);
 }
 
 async function digestTree(root) {

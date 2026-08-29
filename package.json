@@ -1,6 +1,6 @@
 {
   "name": "@flowstack-ui/plugin-marketplace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Versioned Codex and ChatGPT plugin distribution for FLOWSTACK UI.",
   "type": "module",

@@ -1,6 +1,6 @@
 {
   "name": "flowstack-ui",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Exact-version workflows for building, composing, reviewing, and maintaining FLOWSTACK UI.",
   "author": {
     "name": "FLOWSTACK UI",
@@ -19,9 +19,9 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "FLOWSTACK UI",
-    "shortDescription": "Build with exact FLOWSTACK package guidance",
+    "shortDescription": "Build with FLOWSTACK guidance",
     "longDescription": "Build, compose, review, and maintain FLOWSTACK interfaces with exact-version public package Agent Knowledge.",
-    "developerName": "FLOWSTACK UI",
+    "developerName": "Swifty LLC",
     "category": "Developer Tools",
     "capabilities": [
       "Skills"
@@ -34,6 +34,8 @@
     ],
     "brandColor": "#6D4AFF",
     "privacyPolicyURL": "https://github.com/flowstack-ui/plugin/blob/main/PRIVACY.md",
-    "termsOfServiceURL": "https://github.com/flowstack-ui/plugin/blob/main/TERMS.md"
+    "termsOfServiceURL": "https://github.com/flowstack-ui/plugin/blob/main/TERMS.md",
+    "composerIcon": "./assets/composer-icon.png",
+    "logo": "./assets/logo.png"
   }
 }

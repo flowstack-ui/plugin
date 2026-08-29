@@ -30,24 +30,39 @@ assert.equal(manifest.name, config.pluginName);
 assert.equal(manifest.version, packageJson.version);
 assert.equal(packageLock.version, packageJson.version);
 assert.equal(packageLock.packages[""].version, packageJson.version);
-assert.equal(manifest.version, source.version);
+assert.equal(manifest.version, source.pluginVersion);
 assert.equal(manifest.repository, config.repository);
 assert.equal(manifest.skills, "./skills/");
 assert.equal(manifest.interface.displayName, "FLOWSTACK UI");
 assert.equal(manifest.interface.category, "Developer Tools");
+assert.equal(manifest.interface.developerName, config.developerName);
+assert.equal(manifest.interface.shortDescription, config.shortDescription);
+assert.ok(manifest.interface.shortDescription.length <= 30);
 assert.equal(manifest.interface.privacyPolicyURL, config.privacyPolicyURL);
 assert.equal(manifest.interface.termsOfServiceURL, config.termsOfServiceURL);
+assert.equal(manifest.interface.composerIcon, `./${config.interfaceAssets.composerIcon}`);
+assert.equal(manifest.interface.logo, `./${config.interfaceAssets.logo}`);
 assert.deepEqual(manifest.interface.capabilities, ["Skills"]);
 assert.equal("mcpServers" in manifest, false);
 assert.equal("apps" in manifest, false);
 assert.equal("hooks" in manifest, false);
 
-assert.equal(source.schema, "flowstack.plugin-source-lock.v1");
+assert.equal(source.schema, "flowstack.plugin-source-lock.v2");
 assert.equal(source.package, "@flowstack-ui/agent-tools");
-for (const field of ["sourcePluginManifestSha256", "pluginManifestSha256", "skillsSha256"]) {
+for (const field of ["sourcePluginManifestSha256", "pluginManifestSha256", "skillsSha256", "assetsSha256"]) {
   assert.match(source[field], /^[a-f0-9]{64}$/u);
 }
 assert.equal(sha256(manifestBytes), source.pluginManifestSha256);
+
+const assetsRoot = join(pluginRoot, "assets");
+const expectedAssets = Object.values(config.interfaceAssets)
+  .map((path) => relative("assets", path).split(sep).join("/"))
+  .sort();
+const assetFiles = (await filesBelow(assetsRoot))
+  .map((path) => relative(assetsRoot, path).split(sep).join("/"));
+assert.deepEqual(assetFiles, expectedAssets);
+for (const path of assetFiles) await assertSquarePng(join(assetsRoot, path));
+assert.equal(await digestTree(assetsRoot), source.assetsSha256);
 
 const skillsRoot = join(pluginRoot, "skills");
 const skills = (await readdir(skillsRoot, { withFileTypes: true }))
@@ -71,7 +86,16 @@ const allText = `${manifestBytes.toString("utf8")}\n${await Promise.all((await f
 assert.doesNotMatch(allText, /(?:BEGIN PRIVATE|\/Users\/|\/private\/tmp\/|customer-name-placeholder)/u);
 assert.doesNotMatch(allText, /\[TODO(?::|\])/u);
 
-console.log(`Verified ${manifest.name}@${manifest.version}: ${skills.length} skills, skills-only plugin, exact Agent Tools lock`);
+console.log(`Verified ${manifest.name}@${manifest.version}: ${skills.length} skills, exact ${source.package}@${source.version} lock`);
+
+async function assertSquarePng(path) {
+  const content = await readFile(path);
+  const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  assert.ok(content.length >= 24 && content.subarray(0, 8).equals(signature), `${path} must be a PNG`);
+  const width = content.readUInt32BE(16);
+  const height = content.readUInt32BE(20);
+  assert.ok(width > 0 && width === height, `${path} must be square`);
+}
 
 async function digestTree(treeRoot) {
   const digest = createHash("sha256");

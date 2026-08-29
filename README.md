@@ -45,10 +45,19 @@ validates the package and skills-only plugin boundary, stages the replacement,
 and records npm integrity plus content digests in `sources/agent-tools.json`.
 A changed public skill set fails until `config/plugin.json` is reviewed.
 
-Plugin releases use the same version as their locked Agent Tools source. Review
-the generated skill and manifest diff, run the repository check, commit, tag,
-and reinstall from the local marketplace before submitting that version to the
-universal plugin directory.
+Agent Tools and the distributable plugin are independently versioned. By
+default the sync command gives the plugin the source version. For a
+directory-packaging-only release, preserve the exact Agent Tools lock and pass
+an explicit plugin version:
+
+```bash
+npm run sync -- --version 0.1.0 --plugin-version 0.1.1
+```
+
+Review the generated skill, manifest, and interface-asset diff, run the
+repository check, commit, tag the plugin version, and reinstall from the local
+marketplace before submitting that immutable release to the universal plugin
+directory.
 
 ## Development
 
