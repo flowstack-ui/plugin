@@ -73,6 +73,18 @@ try {
   await mkdir(join(stagedPlugin, ".codex-plugin"), { recursive: true });
   await cp(sourceSkills, join(stagedPlugin, "skills"), { recursive: true });
 
+  assertMcpConfig(config.mcp);
+  const mcpConfig = {
+    mcpServers: {
+      [config.mcp.serverName]: {
+        type: config.mcp.type,
+        url: config.mcp.url,
+      },
+    },
+  };
+  const mcpConfigText = `${JSON.stringify(mcpConfig, null, 2)}\n`;
+  await writeFile(join(stagedPlugin, config.mcp.path), mcpConfigText);
+
   for (const assetPath of Object.values(config.interfaceAssets)) {
     assertAssetPath(assetPath);
     const sourceAsset = resolve(repositoryRoot, assetPath);
@@ -88,6 +100,7 @@ try {
     ...sourceManifest,
     version: pluginVersion,
     repository: config.repository,
+    mcpServers: `./${config.mcp.path}`,
     interface: {
       ...sourceManifest.interface,
       developerName: config.developerName,
@@ -96,6 +109,7 @@ try {
       termsOfServiceURL: config.termsOfServiceURL,
       composerIcon: `./${config.interfaceAssets.composerIcon}`,
       logo: `./${config.interfaceAssets.logo}`,
+      capabilities: [...new Set([...(sourceManifest.interface.capabilities ?? []), "MCP"])],
     },
   };
   const pluginManifestText = `${JSON.stringify(pluginManifest, null, 2)}\n`;
@@ -105,7 +119,7 @@ try {
   const assetDigest = await digestTree(join(stagedPlugin, "assets"));
   const finalManifestDigest = sha256(Buffer.from(pluginManifestText));
   const sourceLock = {
-    schema: "flowstack.plugin-source-lock.v2",
+    schema: "flowstack.plugin-source-lock.v3",
     package: packed.name,
     version: packed.version,
     pluginVersion,
@@ -113,6 +127,7 @@ try {
     shasum: packed.shasum,
     sourcePluginManifestSha256: sha256(sourceManifestBytes),
     pluginManifestSha256: finalManifestDigest,
+    mcpConfigSha256: sha256(Buffer.from(mcpConfigText)),
     skillsSha256: skillDigest,
     assetsSha256: assetDigest,
   };
@@ -174,6 +189,16 @@ function isExactVersion(version) {
 function assertAssetPath(path) {
   if (typeof path !== "string" || !/^assets\/[0-9A-Za-z._-]+\.png$/u.test(path)) {
     fail(`interface asset must be a PNG directly under assets/: ${path}`);
+  }
+}
+
+function assertMcpConfig(value) {
+  if (value?.path !== ".mcp.json" || value.serverName !== "flowstack-ui" || value.type !== "http") {
+    fail("review the FLOWSTACK MCP plugin configuration before syncing");
+  }
+  const url = new URL(value.url);
+  if (url.protocol !== "https:" || url.origin !== "https://agents.brick-ui.com" || url.pathname !== "/mcp" || url.search || url.hash) {
+    fail("FLOWSTACK MCP must use the reviewed canonical HTTPS endpoint");
   }
 }
 

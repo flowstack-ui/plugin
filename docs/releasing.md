@@ -5,12 +5,14 @@
 2. Run `npm run sync -- --version <exact-agent-tools-version>`. By default the
    plugin takes the same version. For a packaging-only patch, add
    `--plugin-version <exact-plugin-version>` while preserving the source lock.
-3. Review `sources/agent-tools.json`, the plugin manifest, and every vendored
-   skill and interface-asset diff. Deliberately approve any changed skill
-   inventory in `config/plugin.json`.
+3. Review `sources/agent-tools.json`, the plugin manifest, `.mcp.json`, and
+   every vendored skill and interface-asset diff. Deliberately approve any
+   changed skill inventory or MCP endpoint in `config/plugin.json`.
 4. Run `npm run check` and the OpenAI plugin validator.
 5. Install from the repository marketplace, refresh Codex, and test each skill
-   in a new task against an exact-version FLOWSTACK consumer.
+   in a new task against an exact-version FLOWSTACK consumer. Also test one
+   environment without local script execution and require successful exact
+   resolution through the hosted MCP.
 6. Commit the generated snapshot and tag `v<plugin-version>`.
 7. Submit that immutable tagged version to the universal plugin directory.
 

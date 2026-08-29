@@ -11,6 +11,12 @@
     "composerIcon": "assets/composer-icon.png",
     "logo": "assets/logo.png"
   },
+  "mcp": {
+    "path": ".mcp.json",
+    "serverName": "flowstack-ui",
+    "type": "http",
+    "url": "https://agents.brick-ui.com/mcp"
+  },
   "allowedSkills": [
     "flowstack-ui-builder",
     "flowstack-ui-compose",

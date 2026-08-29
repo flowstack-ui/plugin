@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "flowstack-ui": {
+      "type": "http",
+      "url": "https://agents.brick-ui.com/mcp"
+    }
+  }
+}
