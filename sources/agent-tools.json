@@ -2,11 +2,11 @@
   "schema": "flowstack.plugin-source-lock.v2",
   "package": "@flowstack-ui/agent-tools",
   "version": "0.1.0",
-  "pluginVersion": "0.1.1",
+  "pluginVersion": "0.1.2",
   "integrity": "sha512-uV9bMC7Bys/0+mFtVmqiLDPQV2mT7bP+VFs8XSi24A3vv2WM0Hr82kSwUXxi+gZlrO1FnjClSRA1zg/SVxr3ig==",
   "shasum": "9920f06acefdee114a08f362c6b13818e45aa2db",
   "sourcePluginManifestSha256": "c900ca8766f403c001c1812f9ba63369c1365a76369a8576a2d34b85b40a721c",
-  "pluginManifestSha256": "2faf3fdfaa4e44b036408e7f4931abc3a356b64ebdb241c5134f7ac27ea5ec24",
+  "pluginManifestSha256": "cd39ca20f7a2a3d64c251cb83ff22931ab5cb190839dbdee4dbea9df8a008627",
   "skillsSha256": "85911ab81f5958bb67fc3e8a07af84b4b12ba28c3e865f1531622464798dc5d9",
-  "assetsSha256": "ffca8a7d9a26e8e7a0e66115343cf453a1908ff8a12068a2b1627271f4923fa3"
+  "assetsSha256": "0402b1d4b7c710f35c0cfaa1a6709f43718f8f82d8fa0ceddcfde0d821f6e2b4"
 }

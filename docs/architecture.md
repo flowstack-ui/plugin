@@ -26,6 +26,12 @@ adds repository-owned square interface assets, and replaces
 records both versions plus npm integrity and digests of the source manifest,
 final manifest, interface assets, and complete skill tree.
 
+The interface uses a responsive identity rather than one raster at every size:
+the directory `logo` is the detailed flowing-ribbon FLOWSTACK mark, while
+`composerIcon` is the compact four-band glyph designed to remain legible in
+small composer surfaces. They share the layered-flow concept and palette but
+are intentionally not identical.
+
 The plugin does not bundle MCP. This keeps tool installation explicit and
 allows skills to work across supported ChatGPT and Codex surfaces without
 silently adding a network or local process. The HTTP and stdio MCP transports
