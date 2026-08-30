@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.2 - 2026-08-30
+
+- Lock the plugin to `@flowstack-ui/agent-tools@0.1.4` and its verified npm
+  integrity.
+- Refresh all four workflow resolvers for exact Atom `0.25.1` and Brick
+  `0.1.12`, including the complete public typography guidance.
+- Preserve the canonical hosted MCP declaration and exclude private Blocks,
+  source components, paid delivery records, and credentials.
+
 ## 0.2.1 - 2026-08-29
 
 - Lock the plugin to `@flowstack-ui/agent-tools@0.1.3` and its published npm
