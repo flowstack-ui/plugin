@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.3 - 2026-08-31
+
+- Lock the plugin to the verified `@flowstack-ui/agent-tools@0.1.6` npm
+  archive, including Atom `0.26.0` and Brick `0.2.0` Color Picker and Color
+  Swatch guidance.
+- Preserve the reviewed four-skill payload and canonical hosted MCP endpoint;
+  only exact source provenance and plugin package identity changed.
+
 ## 0.2.2 - 2026-08-30
 
 - Lock the plugin to `@flowstack-ui/agent-tools@0.1.5` and its verified npm
