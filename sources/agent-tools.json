@@ -1,12 +1,12 @@
 {
   "schema": "flowstack.plugin-source-lock.v3",
   "package": "@flowstack-ui/agent-tools",
-  "version": "0.1.5",
-  "pluginVersion": "0.2.2",
-  "integrity": "sha512-UJ5+tChM/T7ee943QzhJ28w4XjemI8N4zrHoO/dmPO69BJhUtjuTWIg85SCX76sj7LHdZssi8XlkVOD+PL9+DA==",
-  "shasum": "283c6a95bd70555363fe15753d319cc9007eb25a",
-  "sourcePluginManifestSha256": "cc480318dca85c8376b7e6c6bc8053b642dd9d087c6456e95d620bf697410167",
-  "pluginManifestSha256": "ca467ad3880d277afec1879008aef0b6bb3c662737d44a3093144fe60ba9f656",
+  "version": "0.1.6",
+  "pluginVersion": "0.2.3",
+  "integrity": "sha512-TM835eIeQqk0xT9dBBuwRnzoEAT7X089SVrBqpaQDrcNfsdvRYnw1Xikxo4J7nybEA+8aZ30WpOB1Yi7/vXtKg==",
+  "shasum": "cefe3555cb2a50fae593a539ea543d0da50c8895",
+  "sourcePluginManifestSha256": "1c427dd36dd7a2d249c2a3fe847058aadfdc7702f25398cdd79b4316ec4eac67",
+  "pluginManifestSha256": "ac5dd5ad8d5ebc74d6655b01bb1d5bb5760a423875e69e8ad2796dc28b303614",
   "mcpConfigSha256": "b1e08f76bc83b9063e8ade08316929ecde3010febbb9c4d6e56e0ffb9a48d80d",
   "skillsSha256": "6059d7b42b044010e0bbf4283545b0d9a660167158e5ffdd2615ba060d9176c5",
   "assetsSha256": "0402b1d4b7c710f35c0cfaa1a6709f43718f8f82d8fa0ceddcfde0d821f6e2b4"
