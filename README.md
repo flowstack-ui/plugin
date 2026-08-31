@@ -65,7 +65,7 @@ to inspect a consumer's installed files.
 Sync one exact published Agent Tools version:
 
 ```bash
-npm run sync -- --version 0.1.4 --plugin-version 0.2.2
+npm run sync -- --version 0.1.5 --plugin-version 0.2.2
 npm run check
 ```
 
@@ -81,7 +81,7 @@ directory-packaging-only release, preserve the exact Agent Tools lock and pass
 an explicit plugin version:
 
 ```bash
-npm run sync -- --version 0.1.4 --plugin-version 0.2.3
+npm run sync -- --version 0.1.5 --plugin-version 0.2.3
 ```
 
 Review the generated skill, manifest, and interface-asset diff, run the
