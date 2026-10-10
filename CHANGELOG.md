@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.2.4 - 2026-10-10
+
+- Lock the four public workflows to `@flowstack-ui/agent-tools@0.1.8`,
+  delivering exact Atom `0.27.3`, Brick `0.3.0`, Colors `0.1.1`, and Theme
+  `0.2.0` guidance.
+- Refresh component-construction and exact-version qualification guidance;
+  retain the same reviewed skill inventory, identity assets, and canonical
+  read-only hosted MCP endpoint.
+- Keep private Blocks source and product policy outside the plugin. This
+  GitHub marketplace release does not change the universal-directory listing.
+
 ## 0.2.3 - 2026-08-31
 
 - Lock the plugin to the verified `@flowstack-ui/agent-tools@0.1.6` npm

@@ -14,10 +14,10 @@ research.
 
 ## Install in Codex
 
-Install the immutable public `v0.2.3` marketplace release from GitHub:
+Install the immutable public `v0.2.4` marketplace release from GitHub:
 
 ```bash
-codex plugin marketplace add flowstack-ui/plugin --ref v0.2.3
+codex plugin marketplace add flowstack-ui/plugin --ref v0.2.4
 codex plugin add flowstack-ui@flowstack-ui
 ```
 
@@ -32,7 +32,7 @@ The currently published universal-directory listing is the skills-only
 
 https://chatgpt.com/plugins/plugins_6a934339ccc88191b35ff37bcaf23c00
 
-The GitHub marketplace above provides the released `0.2.3` Codex package with
+The GitHub marketplace above provides the released `0.2.4` Codex package with
 the hosted FLOWSTACK MCP declaration. The universal-directory listing will be
 updated only after OpenAI approves and the publisher explicitly publishes the
 reviewed MCP-backed release.
@@ -65,7 +65,7 @@ to inspect a consumer's installed files.
 Sync one exact published Agent Tools version:
 
 ```bash
-npm run sync -- --version 0.1.6 --plugin-version 0.2.3
+npm run sync -- --version 0.1.8 --plugin-version 0.2.4
 npm run check
 ```
 
@@ -81,7 +81,7 @@ directory-packaging-only release, preserve the exact Agent Tools lock and pass
 an explicit plugin version:
 
 ```bash
-npm run sync -- --version 0.1.6 --plugin-version 0.2.4
+npm run sync -- --version 0.1.8 --plugin-version 0.2.5
 ```
 
 Review the generated skill, manifest, and interface-asset diff, run the
